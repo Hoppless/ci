@@ -1,0 +1,22 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: hoppless/docker:latest
+
+    resource_class: large
+    steps:
+      - checkout
+
+      - run:
+          name: Firmware Dumper
+          command: |
+             git clone --depth=1 https://github.com/DumprX/DumprX
+             cd DumprX
+             bash setup.sh
+             git config --global user.name "Hoppless"
+             git config --global user.email "hoppless@proton.me"
+             echo "$GH_AUTH" > .github_token
+             echo "$ORG" > .github_orgname
+             bash dumper.sh $LINK
